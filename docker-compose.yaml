@@ -1,0 +1,29 @@
+version: '3'
+services:
+  master:
+    build:
+      args:
+        base: redis:6.2.7
+      context: .
+    command:
+    - redis-server
+    - /usr/local/etc/redis_master.conf
+    container_name: master
+  slave1:
+    build:
+      args:
+        base: redis:6.2.7
+      context: .
+    command:
+    - redis-server
+    - /usr/local/etc/redis_master.conf
+    container_name: slave1
+  slave2:
+    build:
+      args:
+        base: redis:6.2.7
+      context: .
+    command:
+    - redis-server
+    - /usr/local/etc/redis_master.conf
+    container_name: slave2
