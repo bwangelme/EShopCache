@@ -9,6 +9,14 @@ services:
     - redis-server
     - /usr/local/etc/redis_master.conf
     container_name: master
+    healthcheck:
+      interval: 2s
+      retries: 10
+      test:
+      - CMD
+      - redis-cli
+      - ping
+      timeout: 2s
   slave1:
     build:
       args:
@@ -16,8 +24,11 @@ services:
       context: .
     command:
     - redis-server
-    - /usr/local/etc/redis_master.conf
+    - /usr/local/etc/redis_slave.conf
     container_name: slave1
+    depends_on:
+      master:
+        condition: service_healthy
   slave2:
     build:
       args:
@@ -25,5 +36,8 @@ services:
       context: .
     command:
     - redis-server
-    - /usr/local/etc/redis_master.conf
+    - /usr/local/etc/redis_slave.conf
     container_name: slave2
+    depends_on:
+      master:
+        condition: service_healthy
